@@ -1,0 +1,34 @@
+{
+  "Name": "GameModes/TDM",
+  "Description": "Командный дэд матч на 2 команды",
+  "StartClientVersion": 334,
+  "MapFilter": {
+    "IsBlank": false,
+    "HasParcourEnd": false
+  },
+  "Parameters": {
+    "Bool": [
+      {
+        "Name": "MapRotation",
+        "DisplayName": "GmParams/MapRotation",
+        "Default": true
+      },
+      {
+        "Name": "OnlyKnives",
+        "DisplayName": "GmParams/OnlyKnives"
+      },
+      {
+        "Name": "PartialDesruction",
+        "DisplayName": "GmParams/PartialDesruction"
+      },
+      {
+        "Name": "LoosenBlocks",
+        "DisplayName": "GmParams/LoosenBlocks"
+      },
+      {
+        "Name": "FriendlyFire",
+        "DisplayName": "GmParams/FriendlyFire"
+      }
+    ]
+  }
+}
