@@ -6,6 +6,15 @@
     "IsBlank": false,
     "HasParcourEnd": false
   },
+  "MapLists": [
+    {
+      "MapListId": 1,
+      "Name": "первый список - имя в режиме свое"
+    },
+    {
+      "MapListId": 2
+    }
+  ],
   "Parameters": {
     "Bool": [
       {
