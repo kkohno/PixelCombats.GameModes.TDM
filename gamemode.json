@@ -8,11 +8,11 @@
   },
   "MapLists": [
     {
-      "MapListId": 1,
+      "MapListId": 5,
       "Name": "первый список - имя в режиме свое"
     },
     {
-      "MapListId": 2
+      "MapListId": 581
     }
   ],
   "Parameters": {
