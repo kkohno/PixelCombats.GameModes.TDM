@@ -1,6 +1,6 @@
 {
   "Name": "GameModes/TDM",
-  "Description": "Командный дэд матч на 2 команды",
+  "Description": "Битва двух команд",
   "StartClientVersion": 334,
   "MapFilter": {
     "IsBlank": false,
