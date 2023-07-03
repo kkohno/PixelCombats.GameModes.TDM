@@ -1,5 +1,5 @@
 {
-  "Name": "GameModes/TDM",
+  "Name": "TDM",
   "Description": "Битва двух команд",
   "StartClientVersion": 334,
   "MapFilter": {
