@@ -1,0 +1,465 @@
+
+//var Color = importNamespace('PixelCombats.ScriptingApi.Structures');
+//var System = importNamespace('System');
+
+// ���������
+var WaitingPlayersTime = 10;
+var BuildBaseTime = 30;
+var GameModeTime = 300;
+var EndOfMatchTime = 10;
+
+// ��������� ����
+var WaitingStateValue = "Waiting";
+var BuildModeStateValue = "BuildMode";
+var GameStateValue = "Game";
+var EndOfMatchStateValue = "EndOfMatch";
+
+// ���������� ����������
+var mainTimer = Timers.GetContext().Get("Main");
+var stateProp = Properties.GetContext().Get("State");
+var myTimer1 = Timers.GetContext().Get("tim1");
+var myTimer2 = Timers.GetContext().Get("tim2");
+var myTimer4 = Timers.GetContext().Get("tim4");
+var myTimer3 = Timers.GetContext().Get("tim3");
+// ��������� ��������� �������� �������
+Damage.GetContext().GranadeTouchExplosion.Value = false;
+BreackGraph.Damage = false;
+
+// ���� ������ ������ ������
+BreackGraph.PlayerBlockBoost = true;
+
+// ��������� ����
+Properties.GetContext().GameModeName.Value = "GameModes/Team Dead Match";
+TeamsBalancer.IsAutoBalance = true;
+Ui.GetContext().MainTimerId.Value = mainTimer.Id;
+// ������� �������
+Teams.Add("Blue", "Teams/Blue", { b: 1 });
+Teams.Add("Red", "Teams/Red", { r: 1 });
+var bT = Teams.Get("Blue");
+var rT = Teams.Get("Red");
+bT.Spawns.SpawnPointsGroups.Add(1);
+rT.Spawns.SpawnPointsGroups.Add(2);
+
+
+
+Teams.OnPlayerChangeTeam.Add(function(p){ p.Spawns.Spawn();
+  {
+     p.Properties.Get("port").Value = 0;
+     p.Properties.Get("Hp").Value = 3;
+     p.Properties.Get("H").Value = 1;
+     p.Inventory.Melee.Value = true;
+     p.Properties.Get("character").Value = 1+Math.random() *2;
+     p.Properties.Get("character").Value = Math.round(p.Properties.Get("character").Value * 1) / 1;
+     Character(p);
+	}
+});
+     
+// ������ ���� ������� ������
+var maxPlayers = Players.MaxCount * 3;
+Teams.Get("Red").Properties.Get("Deaths").Value = 0;
+Teams.Get("Blue").Properties.Get("Deaths").Value = 0;
+Teams.Get("Blue").Properties.Get("number").Value = 4;
+// ������ ��� �������� � �����������
+LeaderBoard.PlayerLeaderBoardValues = [
+	{
+		Value: "Kills",
+		DisplayName: "Statistics/Kills",
+		ShortDisplayName: "Statistics/KillsShort"
+	},
+	{
+		Value: "Deaths",
+		DisplayName: "Statistics/Deaths",
+		ShortDisplayName: "Statistics/DeathsShort"
+	},
+	{
+		Value: "Scores",
+		DisplayName: "Statistics/Scores",
+		ShortDisplayName: "Statistics/ScoresShort"
+	}
+];
+LeaderBoard.TeamLeaderBoardValue = {
+	Value: "Deaths",
+	DisplayName: "Statistics\Deaths",
+	ShortDisplayName: "Statistics\Deaths"
+};
+// ��� ������� � ����������
+LeaderBoard.TeamWeightGetter.Set(function(team) {
+	return team.Properties.Get("Deaths").Value;
+});
+// ��� ������ � ����������
+LeaderBoard.PlayersWeightGetter.Set(function(player) {
+	return player.Properties.Get("Kills").Value;
+});
+
+// ������ ��� �������� ������
+Ui.GetContext().TeamProp1.Value = { Team: "Blue", Prop: "Deaths" };
+Ui.GetContext().TeamProp2.Value = { Team: "Red", Prop: "Deaths" };
+var yellowView = AreaViewService.GetContext().Get("YellowView");
+yellowView.Color = { g: 1 };
+yellowView.Tags = ["c"];
+yellowView.Enable = true;
+
+var greenView = AreaViewService.GetContext().Get("GreenView");
+greenView.Color = { g: 1, r: 1 };
+greenView.Tags = ["cch"];
+greenView.Enable = true;
+
+characterch = AreaPlayerTriggerService.Get("characterch")
+characterch.Tags = ["cch"];  
+characterch.Enable = true;  
+characterch.OnEnter.Add(function(p) { 
+p.Properties.Get("port").Value += 1;
+if (p.Properties.Get("port").Value >= 4){
+p.Properties.Get("port").Value -= 4;
+p.Ui.Hint.Value = "чтобы выбрать Класс зайдите в зону повторно";
+}else{
+if (p.Properties.Get("port").Value <= 1){
+p.Ui.Hint.Value = "1.Класс тяжелый ,способность: при каждой смерти добавляеться по 500 хп к общиму количеству хп";
+}else{
+if (p.Properties.Get("port").Value == 2){
+p.Ui.Hint.Value = "2.Класс средний , способность при получении урона появляется щит,на 20 сек,перезарядка 30 секунд";
+}else{
+if (p.Properties.Get("port").Value == 3){
+p.Ui.Hint.Value = "3.Класс легкий ,способность при достяжении 100 очков крови получает осн.оружие,щит на 30 секунд ,перезарядка 1минута";
+}else{ 
+}
+}
+}
+}
+});
+characterch.OnExit.Add(function(p) { 
+p.Ui.Hint.Reset();
+});
+character = AreaPlayerTriggerService.Get("character")
+character.Tags = ["c"];  
+character.Enable = true;  
+character.OnEnter.Add(function(p) { 
+if (p.Properties.Get("port").Value == 1 || p.Properties.Get("port").Value == 0){
+p.Properties.Get("character").Value = 1;
+p.Properties.Get("PlayerHp").Value = 0;
+p.Properties.Get("shield").Value = false;
+p.Inventory.Secondary.Value = false;
+p.inventory.ExplosiveInfinity.Value = false;
+p.inventory.Build.Value = false;
+p.Properties.Get("shelter2").Value = 0;
+contextedProperties.GetContext(p).InventoryType.Value = 0;
+Character(p);
+p.Properties.Get("port").Value += 1;
+p.Spawns.Spawn();
+}else{
+if (p.Properties.Get("port").Value == 2){
+p.Properties.Get("character").Value = 2;
+p.Properties.Get("PlayerHp").Value = 0;
+p.Properties.Get("shelter").Value = 0;
+p.Inventory.Main.Value = false;
+p.Inventory.Secondary.Value = false;
+Character(p);
+p.Spawns.Spawn();
+}else{
+if (p.Properties.Get("port").Value == 3){
+p.Properties.Get("PlayerHp").Value = 0;
+p.Properties.Get("character").Value = 3;
+p.Properties.Get("shield").Value = false;
+p.Inventory.Main.Value = false;
+p.inventory.ExplosiveInfinity.Value = false;
+p.inventory.Build.Value = false;
+contextedProperties.GetContext(p).InventoryType.Value = 0;
+Character(p);
+p.Spawns.Spawn();
+}else{
+}
+}
+}
+p.Properties.Get("Hp").Value = 3;
+});
+character.OnExit.Add(function(p) { 
+p.Ui.Hint.Reset();
+});
+var zahTrigger = AreaPlayerTriggerService.Get("zahTrigger");
+zahTrigger.Tags = ["zah"];
+zahTrigger.Enable = true;
+zahTrigger.OnEnter.Add(function(p) {});
+var zah2Trigger = AreaPlayerTriggerService.Get("zah2Trigger");
+zah2Trigger.Tags = ["zah2"];
+zah2Trigger.Enable = true;
+zah2Trigger.OnEnter.Add(function(p) {});
+
+// ��������� ���� � ������� �� �������
+Teams.OnRequestJoinTeam.Add(function(player,team){team.Add(player);});
+// ����� �� ����� � �������
+Teams.OnPlayerChangeTeam.Add(function(player){ player.Spawns.Spawn()});
+
+// ������ ������� ����������� ����� ������
+var immortalityTimerName="immortality";
+Spawns.GetContext().OnSpawn.Add(function(player){
+	player.Properties.Immortality.Value=true;
+	timer=player.Timers.Get(immortalityTimerName).Restart(5);
+});
+Timers.OnPlayerTimer.Add(function(timer){
+	if(timer.Id!=immortalityTimerName) return;
+	timer.Player.Properties.Immortality.Value=false;
+});
+
+
+function Character(p){
+if (p.Properties.Get("character").Value == 1 || p.Properties.Get("character").Value == 0){
+     p.Ui.Hint.Value = "у вас класс Тяжелый";  
+     p.Properties.Get("Status").Value = "Танк";
+     contextedProperties.GetContext(p).MaxHp.Value = 1000;
+     p.Inventory.Main.Value = true;
+     p.Inventory.MainInfinity.Value = true;
+     p.Properties.Get("PlayerHp").Value = 1000;
+     p.Properties.Get("Hp").Value = 5;
+     p.Timers.Get("shield").Stop();
+     p.Timers.Get("main").Stop();
+}
+     if (p.Properties.Get("character").Value == 2){
+     p.Ui.Hint.Value = "у вас класс средний";  
+     p.Properties.Get("Status").Value = "Маг";
+     contextedProperties.GetContext(p).MaxHp.Value = 750;
+     p.inventory.Explosive.Value = true;
+	 p.inventory.ExplosiveInfinity.Value = true;
+	 p.inventory.Build.Value = false;
+	 p.Properties.Get("shield").Value = true;
+     contextedProperties.GetContext(p).InventoryType.Value = 1;
+     p.Timers.Get("shield").Stop();
+     p.Timers.Get("main").Stop();
+}
+	 if (p.Properties.Get("character").Value == 3){
+     p.Ui.Hint.Value = "у вас класс Лёгкий";  
+     p.inventory.Secondary.Value = true;
+     p.inventory.SecondaryInfinity.Value = true; 
+     p.Properties.Get("Status").Value = "Убийца";
+     contextedProperties.GetContext(p).MaxHp.Value = 550;
+     p.Properties.Get("PlayerHp").Value = 550;
+     p.Timers.Get("shield").Stop();
+     p.Timers.Get("main").Stop();
+}
+}
+
+// ���� � ������� ���������� ������� ���������� �� ��������� ����
+Properties.OnTeamProperty.Add(function(context, value) {
+	if (value.Name !== "Deaths") return;
+	if (value.Value >= maxPlayer) SetEndOfMatchMode();
+});
+
+Spawns.GetContext().OnSpawn.Add(function(p){
+	if (p.Properties.Get("H").Value >= 1) {
+	p.Properties.Get("H").Value = 0;
+	Character(p);
+	}
+});
+// ������� �������
+Damage.OnDeath.Add(function(p) {
+	++p.Properties.Deaths.Value;
+	p.Properties.Get("Hp").Value--;
+	if (p.Properties.Get("Hp").Value <= 0){
+	p.Ui.Hint.Value = "вы потеряли все свои жизни ";
+	p.Spawns.RespawnTime.Value = 3;
+	p.Timers.Get("spawn").Restart(60);
+	}else{
+	if (p.Properties.Get("Hp").Value == 1){
+	p.Spawns.RespawnEnable = true;
+	p.Spawns.RespawnTime.Value = 60;
+	p.Ui.Hint.Value = "у вас осталось: " +p.Properties.Get("Hp").Value +" жизней";  
+	}else{
+	p.Spawns.RespawnEnable = true;
+	p.Spawns.RespawnTime.Value = 3;
+	p.Ui.Hint.Value = "у вас осталось: " +p.Properties.Get("Hp").Value +" жизней";  
+	}
+	}
+});
+// ������� �������
+Damage.OnKill.Add(function(p, k) {
+	if (k.Team != null && k.Team != p.Team) {
+		++p.Properties.Kills.Value;
+		p.Properties.Scores.Value += 100;
+		if (stateProp == "Game") return;
+		if (p.Team == Teams.Get("Blue")){
+		Teams.Get("Blue").Properties.Get("Deaths").Value++;
+		}else{
+		Teams.Get("Red").Properties.Get("Deaths").Value++;
+		}
+		if (k.Properties.Get("character").Value == 1 && k.Properties.Get("PlayerHp").Value <= 3000){
+		k.Properties.Get("PlayerHp").Value += 250;
+		contextedProperties.GetContext(k).MaxHp.Value = k.Properties.Get("PlayerHp").Value;
+		}
+	}
+});
+
+Damage.OnDamage.Add(function(p, dmg, damage) {
+if (dmg.Team != null && dmg.Team != p.Team){
+if (dmg.Properties.Get("shield").Value && p.Properties.Get("character").Value >= 3){
+dmg.Properties.Get("shield").Value = false;
+dmg.Ui.Hint.Value = "у вас сработал щит,он будет активен еще 10 секунд";  
+dmg.Timers.Get("shield").Restart(30);
+dmg.Properties.Immortality.Value=true;
+ timer=dmg.Timers.Get(immortalityTimerName).Restart(10);
+}
+if (p.Properties.Get("character").Value >= 3) {
+p.Properties.Get("shelter").Value += Math.ceil(damage);
+p.Ui.Hint.Value = "у вас уже: " +p.Properties.Get("shelter").Value +" крови,вам нужно 2000 чтобы использовать способность";
+}
+if (p.Properties.Get("shelter").Value >= 2000 && p.Properties.Get("character").Value == 3){
+p.Ui.Hint.Value = "вы накопили нужное количество крови,у вас сработала способность,она будет активна еще 30 секунд";  
+p.Inventory.Main.Value = true;
+p.Properties.Get("shelter2").Value += 100;
+p.Properties.Get("shelter").Value -= 2000;
+p.Properties.Get("PlayerHp").Value += p.Properties.Get("shelter2").Value;
+p.Properties.Immortality.Value=true;
+ timer=p.Timers.Get(immortalityTimerName).Restart(30);
+p.Timers.Get("main").Restart(30);
+}
+if (p.Properties.Get("character").Value == 3){
+contextedProperties.GetContext(p).MaxHp.Value = p.Properties.Get("PlayerHp").Value;
+}
+}
+});
+// ��������� ������������ �������
+mainTimer.OnTimer.Add(function() {
+	switch (stateProp.Value) {
+	case WaitingStateValue:
+		SetBuildMode();
+		break;
+	case BuildModeStateValue:
+		SetGameMode();
+		break;
+	case GameStateValue:
+		SetBuildMode();
+		break;
+	case EndOfMatchStateValue:
+		RestartGame();
+		break;
+	}
+});
+Timers.OnPlayerTimer.Add(function(timer) {
+  var p = timer.Player;
+  var prop = p.Properties; 
+  var pId = timer.id; 
+//таймеры
+    if (pId === "shield") { 
+   p.Properties.Get("shield").Value = true;
+   p.Ui.Hint.Value = "щит готов к работе";  
+   }
+   if (pId === "main") { 
+   p.Inventory.Main.Value = false;
+   }
+   if (pId === "spawn") {
+   p.Properties.Get("Hp").Value = 3;
+   p.Spawns.RespawnEnable = true;
+   }
+});
+
+myTimer3.OnTimer.Add(function()
+{
+ var area = AreaService.GetByTag("zah")[0];
+ var iter = area.Ranges.GetEnumerator();
+ iter.MoveNext();
+ MapEditor.SetBlock(iter.Current,0);
+});
+myTimer4.OnTimer.Add(function()
+{
+ var area = AreaService.GetByTag("zah")[0];
+ var iter = area.Ranges.GetEnumerator();
+ iter.MoveNext();
+ MapEditor.SetBlock(iter.Current,21);
+});
+myTimer1.OnTimer.Add(function()
+{
+ var area = AreaService.GetByTag("zah2")[0];
+ var iter = area.Ranges.GetEnumerator();
+ iter.MoveNext();
+ MapEditor.SetBlock(iter.Current,0);
+});
+myTimer2.OnTimer.Add(function()
+{
+ var area = AreaService.GetByTag("zah2")[0];
+ var iter = area.Ranges.GetEnumerator();
+ iter.MoveNext();
+ MapEditor.SetBlock(iter.Current,21);
+});
+
+// задаем первое игровое состояние
+SetWaitingMode();
+
+// состояния игры
+function SetWaitingMode() {
+	stateProp.Value = WaitingStateValue;
+	Ui.GetContext().Hint.Value = "ожидание игроков";
+	Spawns.GetContext().enable = false;
+	mainTimer.Restart(WaitingPlayersTime);
+}
+function SetBuildMode() 
+{
+	stateProp.Value = BuildModeStateValue;
+	Ui.GetContext().Hint.Value = "Выбор класса";
+	
+	character.Enable = true;  
+	characterch.Enable = true; 
+	yellowView.Enable = true; 
+	greenView.Enable = true;
+	
+	rT.Inventory.Main.Value = false;
+	rT.Inventory.Secondary.Value = false;
+	rT.Inventory.Melee.Value = true;
+	rT.Inventory.Explosive.Value = true;
+	rT.Inventory.Build.Value = false;
+	rT.Ui.Hint.Reset();
+	Damage.GetContext(rT).DamageIn.Value = false;
+	bT.Inventory.Main.Value = false;
+	bT.Inventory.Secondary.Value = false;
+	bT.Inventory.Melee.Value = true;
+	bT.Inventory.Explosive.Value = true;
+	bT.Inventory.Build.Value = false;
+	bT.Ui.Hint.Reset();
+	Damage.GetContext(bT).DamageIn.Value = false;
+	
+	myTimer3.Restart(30);
+	myTimer1.Restart(30);
+	
+	mainTimer.Restart(BuildBaseTime);
+	Spawns.GetContext().enable = true;
+	SpawnTeams();
+}
+function SetGameMode() 
+{
+	stateProp.Value = GameStateValue;
+	Ui.GetContext().Hint.Value = "Убейте врага,вам нужно убить: " +maxPlayers +"раз";
+	
+	character.Enable = false;  
+	characterch.Enable = false;  
+	yellowView.Enable = false; 
+	greenView.Enable = false;
+	
+	Damage.GetContext(rT).DamageIn.Value = true;
+	Damage.GetContext(bT).DamageIn.Value = true;
+	
+	mainTimer.Restart(GameModeTime);
+	SpawnTeams();
+	Spawns.GetContext().enable = true;
+	myTimer4.Restart(300);
+	myTimer2.Restart(300);
+}
+function SetEndOfMatchMode() {
+	stateProp.Value = EndOfMatchStateValue;
+	Ui.GetContext().Hint.Value = "Hint/EndOfMatch";
+	Spawns.GetContext().enable = false;
+	
+	var spawns = Spawns.GetContext();
+	spawns.enable = false;
+	spawns.Despawn();
+	Game.GameOver(LeaderBoard.GetTeams());
+	mainTimer.Restart(EndOfMatchTime);
+}
+function RestartGame() {
+	Game.RestartGame();
+}
+
+function SpawnTeams() {
+	var e = Teams.GetEnumerator();
+	while (e.moveNext()) {
+		Spawns.GetContext(e.Current).Spawn();
+	}
+}
+
+
