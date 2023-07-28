@@ -1,6 +1,6 @@
 {
   "Name": "TDM",
-  "Description": "Team Dead Match. Битва двух команд",
+  "Description": "Team Death Match. Битва двух команд",
   "StartClientVersion": 334,
   "MapFilter": {
     "IsBlank": false,
