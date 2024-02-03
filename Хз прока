@@ -2,10 +2,10 @@
 //var System = importNamespace('System');
 
 // константы
-var WaitingPlayersTime = 30;
-var BuildBaseTime = 10;
-var GameModeTime = 1;
-var EndOfMatchTime = 1;
+var WaitingPlayersTime = 25;
+var BuildBaseTime = 20;
+var GameModeTime = 2;
+var EndOfMatchTime = 2;
 var EndAreaTag = "maxim";
 
 // константы имен
@@ -229,7 +229,6 @@ function SpawnTeams() {
 		Spawns.GetContext(e.Current).Spawn();
 	}
 }
-
 
 
 
