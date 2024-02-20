@@ -1,4 +1,4 @@
-import { Players, BuildBlocksSet, Teams, Damage, BreackGraph, Ui, Properties, GameMode, Spawns, Timers, TeamsBalancer } from 'pixel_combats/room';
+import { Players, LeaderBoard, BuildBlocksSet, Teams, Damage, BreackGraph, Ui, Properties, GameMode, Spawns, Timers, TeamsBalancer } from 'pixel_combats/room';
 import * as teams from './default_teams.js';
 //var Color = importNamespace('PixelCombats.ScriptingApi.Structures');
 //var System = importNamespace('System');
@@ -73,11 +73,11 @@ LeaderBoard.TeamLeaderBoardValue = {
 	ShortDisplayName: "Statistics\Deaths"
 };
 // ��� ������� � ����������
-LeaderBoard.TeamWeightGetter.Set(function(team) {
+LeaderBoard.TeamWeightGetter.Set(function (team) {
 	return team.Properties.Get("Deaths").Value;
 });
 // ��� ������ � ����������
-LeaderBoard.PlayersWeightGetter.Set(function(player) {
+LeaderBoard.PlayersWeightGetter.Set(function (player) {
 	return player.Properties.Get("Kills").Value;
 });
 
@@ -86,43 +86,43 @@ Ui.GetContext().TeamProp1.Value = { Team: "Blue", Prop: "Deaths" };
 Ui.GetContext().TeamProp2.Value = { Team: "Red", Prop: "Deaths" };
 
 // ��������� ���� � ������� �� �������
-Teams.OnRequestJoinTeam.Add(function(player,team){team.Add(player);});
+Teams.OnRequestJoinTeam.Add(function (player, team) { team.Add(player); });
 // ����� �� ����� � �������
-Teams.OnPlayerChangeTeam.Add(function(player){ player.Spawns.Spawn()});
+Teams.OnPlayerChangeTeam.Add(function (player) { player.Spawns.Spawn() });
 
 // ������ ������� ����������� ����� ������
-var immortalityTimerName="immortality";
-Spawns.GetContext().OnSpawn.Add(function(player){
-	player.Properties.Immortality.Value=true;
-	timer=player.Timers.Get(immortalityTimerName).Restart(5);
+var immortalityTimerName = "immortality";
+Spawns.GetContext().OnSpawn.Add(function (player) {
+	player.Properties.Immortality.Value = true;
+	timer = player.Timers.Get(immortalityTimerName).Restart(5);
 });
-Timers.OnPlayerTimer.Add(function(timer){
-	if(timer.Id!=immortalityTimerName) return;
-	timer.Player.Properties.Immortality.Value=false;
+Timers.OnPlayerTimer.Add(function (timer) {
+	if (timer.Id != immortalityTimerName) return;
+	timer.Player.Properties.Immortality.Value = false;
 });
 
 // ����� ������ ������ ������ �������� ���� ������ � �������
-Properties.OnPlayerProperty.Add(function(context, value) {
+Properties.OnPlayerProperty.Add(function (context, value) {
 	if (value.Name !== "Deaths") return;
 	if (context.Player.Team == null) return;
 	context.Player.Team.Properties.Get("Deaths").Value--;
 });
 // ���� � ������� ���������� ������� ���������� �� ��������� ����
-Properties.OnTeamProperty.Add(function(context, value) {
+Properties.OnTeamProperty.Add(function (context, value) {
 	if (value.Name !== "Deaths") return;
 	if (value.Value <= 0) SetEndOfMatchMode();
 });
 
 // ������� �������
-Spawns.OnSpawn.Add(function(player) {
+Spawns.OnSpawn.Add(function (player) {
 	++player.Properties.Spawns.Value;
 });
 // ������� �������
-Damage.OnDeath.Add(function(player) {
+Damage.OnDeath.Add(function (player) {
 	++player.Properties.Deaths.Value;
 });
 // ������� �������
-Damage.OnKill.Add(function(player, killed) {
+Damage.OnKill.Add(function (player, killed) {
 	if (killed.Team != null && killed.Team != player.Team) {
 		++player.Properties.Kills.Value;
 		player.Properties.Scores.Value += 100;
@@ -130,20 +130,20 @@ Damage.OnKill.Add(function(player, killed) {
 });
 
 // ��������� ������������ �������
-mainTimer.OnTimer.Add(function() {
+mainTimer.OnTimer.Add(function () {
 	switch (stateProp.Value) {
-	case WaitingStateValue:
-		SetBuildMode();
-		break;
-	case BuildModeStateValue:
-		SetGameMode();
-		break;
-	case GameStateValue:
-		SetEndOfMatchMode();
-		break;
-	case EndOfMatchStateValue:
-		RestartGame();
-		break;
+		case WaitingStateValue:
+			SetBuildMode();
+			break;
+		case BuildModeStateValue:
+			SetGameMode();
+			break;
+		case GameStateValue:
+			SetEndOfMatchMode();
+			break;
+		case EndOfMatchStateValue:
+			RestartGame();
+			break;
 	}
 });
 
@@ -158,8 +158,7 @@ function SetWaitingMode() {
 	mainTimer.Restart(WaitingPlayersTime);
 }
 
-function SetBuildMode() 
-{
+function SetBuildMode() {
 	stateProp.Value = BuildModeStateValue;
 	Ui.GetContext().Hint.Value = "Hint/BuildBase";
 	var inventory = Inventory.GetContext();
@@ -173,8 +172,7 @@ function SetBuildMode()
 	Spawns.GetContext().enable = true;
 	SpawnTeams();
 }
-function SetGameMode() 
-{
+function SetGameMode() {
 	stateProp.Value = GameStateValue;
 	Ui.GetContext().Hint.Value = "Hint/AttackEnemies";
 
