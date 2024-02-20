@@ -210,10 +210,11 @@ function RestartGame() {
 }
 
 function SpawnTeams() {
-	var e = Teams.GetEnumerator();
+	/*var e = Teams.GetEnumerator();
 	while (e.moveNext()) {
 		Spawns.GetContext(e.Current).Spawn();
-	}
+	}*/
+	for(team in Teams) Spawns.GetContext(team).Spawn();
 }
 
 
