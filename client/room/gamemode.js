@@ -214,7 +214,7 @@ function SpawnTeams() {
 	while (e.moveNext()) {
 		Spawns.GetContext(e.Current).Spawn();
 	}*/
-	for(team in Teams) Spawns.GetContext(team).Spawn();
+	for(let team in Teams) Spawns.GetContext(team).Spawn();
 }
 
 
