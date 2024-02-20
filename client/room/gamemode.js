@@ -92,9 +92,10 @@ Teams.OnPlayerChangeTeam.Add(function (player) { player.Spawns.Spawn() });
 
 // ������ ������� ����������� ����� ������
 var immortalityTimerName = "immortality";
+var immortalityTimer = player.Timers.Get(immortalityTimerName);
 Spawns.GetContext().OnSpawn.Add(function (player) {
 	player.Properties.Immortality.Value = true;
-	timer = player.Timers.Get(immortalityTimerName).Restart(5);
+	immortalityTimer.Restart(5);
 });
 Timers.OnPlayerTimer.Add(function (timer) {
 	if (timer.Id != immortalityTimerName) return;
