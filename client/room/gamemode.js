@@ -1,4 +1,4 @@
-import { Build, BuildBlocksSet, Teams, Damage, BreackGraph, Ui, Properties, GameMode, Spawns, Timers } from 'pixel_combats/room';
+import { Build, BuildBlocksSet, Teams, Damage, BreackGraph, Ui, Properties, GameMode, Spawns, Timers, TeamsBalancer } from 'pixel_combats/room';
 //var Color = importNamespace('PixelCombats.ScriptingApi.Structures');
 //var System = importNamespace('System');
 
