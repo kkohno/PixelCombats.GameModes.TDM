@@ -90,12 +90,11 @@ Teams.OnRequestJoinTeam.Add(function (player, team) { team.Add(player); });
 // ����� �� ����� � �������
 Teams.OnPlayerChangeTeam.Add(function (player) { player.Spawns.Spawn() });
 
-// ������ ������� ����������� ����� ������
+// бессмертие после респавна
 var immortalityTimerName = "immortality";
-var immortalityTimer = player.Timers.Get(immortalityTimerName);
 Spawns.GetContext().OnSpawn.Add(function (player) {
 	player.Properties.Immortality.Value = true;
-	immortalityTimer.Restart(5);
+	player.Timers.Get(immortalityTimerName).Restart(5);
 });
 Timers.OnPlayerTimer.Add(function (timer) {
 	if (timer.Id != immortalityTimerName) return;
