@@ -1,4 +1,5 @@
 import { Build, BuildBlocksSet, Teams, Damage, BreackGraph, Ui, Properties, GameMode, Spawns, Timers, TeamsBalancer } from 'pixel_combats/room';
+import * as teams from './default_teams.js';
 //var Color = importNamespace('PixelCombats.ScriptingApi.Structures');
 //var System = importNamespace('System');
 
@@ -31,11 +32,9 @@ BreackGraph.PlayerBlockBoost = true;
 Properties.GetContext().GameModeName.Value = "GameModes/Team Dead Match";
 TeamsBalancer.IsAutoBalance = true;
 Ui.GetContext().MainTimerId.Value = mainTimer.Id;
-// ������� �������
-Teams.Add("Blue", "Teams/Blue", { b: 1 });
-Teams.Add("Red", "Teams/Red", { r: 1 });
-var blueTeam = Teams.Get("Blue");
-var redTeam = Teams.Get("Red");
+// создаем стандартные команды
+var blueTeam = teams.create_team_blue();
+var redTeam = teams.create_team_red();
 blueTeam.Spawns.SpawnPointsGroups.Add(1);
 redTeam.Spawns.SpawnPointsGroups.Add(2);
 blueTeam.Build.BlocksSet.Value = BuildBlocksSet.Blue;
@@ -43,8 +42,8 @@ redTeam.Build.BlocksSet.Value = BuildBlocksSet.Red;
 
 // ������ ���� ������� ������
 var maxDeaths = Players.MaxCount * 5;
-Teams.Get("Red").Properties.Get("Deaths").Value = maxDeaths;
-Teams.Get("Blue").Properties.Get("Deaths").Value = maxDeaths;
+redTeam.Properties.Get("Deaths").Value = maxDeaths;
+blueTeam.Properties.Get("Deaths").Value = maxDeaths;
 // ������ ��� �������� � �����������
 LeaderBoard.PlayerLeaderBoardValues = [
 	{
