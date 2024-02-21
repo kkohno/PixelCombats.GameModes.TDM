@@ -46,32 +46,12 @@ redTeam.Properties.Get("Deaths").Value = maxDeaths;
 blueTeam.Properties.Get("Deaths").Value = maxDeaths;
 // ������ ��� �������� � �����������
 LeaderBoard.PlayerLeaderBoardValues = [
-	{
-		Value: "Kills",
-		DisplayName: "Statistics/Kills",
-		ShortDisplayName: "Statistics/KillsShort"
-	},
-	{
-		Value: "Deaths",
-		DisplayName: "Statistics/Deaths",
-		ShortDisplayName: "Statistics/DeathsShort"
-	},
-	{
-		Value: "Spawns",
-		DisplayName: "Statistics/Spawns",
-		ShortDisplayName: "Statistics/SpawnsShort"
-	},
-	{
-		Value: "Scores",
-		DisplayName: "Statistics/Scores",
-		ShortDisplayName: "Statistics/ScoresShort"
-	}
+	new DisplayValueHeader("Kills", "Statistics/Kills", "Statistics/KillsShort"),
+	new DisplayValueHeader("Deaths", "Statistics/Deaths", "Statistics/DeathsShort"),
+	new DisplayValueHeader("Spawns", "Statistics/Spawns", "Statistics/SpawnsShort"),
+	new DisplayValueHeader("Scores", "Statistics/Scores", "Statistics/ScoresShort")
 ];
-LeaderBoard.TeamLeaderBoardValue = {
-	Value: "Deaths",
-	DisplayName: "Statistics\Deaths",
-	ShortDisplayName: "Statistics\Deaths"
-};
+LeaderBoard.TeamLeaderBoardValue = new DisplayValueHeader("Deaths", "Statistics\Deaths", "Statistics\Deaths");
 // ��� ������� � ����������
 LeaderBoard.TeamWeightGetter.Set(function (team) {
 	return team.Properties.Get("Deaths").Value;
@@ -210,7 +190,7 @@ function RestartGame() {
 }
 
 function SpawnTeams() {
-	for(const team of Teams.All)
+	for (const team of Teams.All)
 		Spawns.GetContext(team).Spawn();
 }
 
