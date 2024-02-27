@@ -1,3 +1,4 @@
+import { Color } from 'pixel_combats/basic';
 import { Teams } from 'pixel_combats/room';
 
 export const RED_TEAM_NAME = "Red";

@@ -1,3 +1,4 @@
+import { DisplayValueHeader } from 'pixel_combats/basic';
 import { Players, Inventory, LeaderBoard, BuildBlocksSet, Teams, Damage, BreackGraph, Ui, Properties, GameMode, Spawns, Timers, TeamsBalancer } from 'pixel_combats/room';
 import * as teams from './default_teams.js';
 //var Color = importNamespace('PixelCombats.ScriptingApi.Structures');
