@@ -4,23 +4,25 @@ import * as teams from './default_teams.js';
 //var Color = importNamespace('PixelCombats.ScriptingApi.Structures');
 //var System = importNamespace('System');
 
-// ���������
-var WaitingPlayersTime = 10;
-var BuildBaseTime = 30;
-var GameModeTime = 600;
-var EndOfMatchTime = 10;
+// настройки
+const WaitingPlayersTime = 10;
+const BuildBaseTime = 30;
+const GameModeTime = 600;
+const EndOfMatchTime = 10;
+const maxDeaths = Players.MaxCount * 5;
 
-// ��������� ����
-var WaitingStateValue = "Waiting";
-var BuildModeStateValue = "BuildMode";
-var GameStateValue = "Game";
-var EndOfMatchStateValue = "EndOfMatch";
+// имена используемых объектов
+const WaitingStateValue = "Waiting";
+const BuildModeStateValue = "BuildMode";
+const GameStateValue = "Game";
+const EndOfMatchStateValue = "EndOfMatch";
+const immortalityTimerName = "immortality"; // имя таймера, используемого в контексте игрока, для его бессмертия
 
-// ���������� ����������
-var mainTimer = Timers.GetContext().Get("Main");
-var stateProp = Properties.GetContext().Get("State");
+// получаем объекты, с которыми работает режим
+const mainTimer = Timers.GetContext().Get("Main");
+const stateProp = Properties.GetContext().Get("State");
 
-// ��������� ��������� �������� �������
+// применяем параметры конструктора режима
 Damage.FriendlyFire = GameMode.Parameters.GetBool("FriendlyFire");
 Map.Rotation = GameMode.Parameters.GetBool("MapRotation");
 BreackGraph.OnlyPlayerBlocksDmg = GameMode.Parameters.GetBool("PartialDesruction");
@@ -34,15 +36,12 @@ Properties.GetContext().GameModeName.Value = "GameModes/Team Dead Match";
 TeamsBalancer.IsAutoBalance = true;
 Ui.GetContext().MainTimerId.Value = mainTimer.Id;
 // создаем стандартные команды
-var blueTeam = teams.create_team_blue();
-var redTeam = teams.create_team_red();
-blueTeam.Spawns.SpawnPointsGroups.Add(1);
-redTeam.Spawns.SpawnPointsGroups.Add(2);
+const blueTeam = teams.create_team_blue();
+const redTeam = teams.create_team_red();
 blueTeam.Build.BlocksSet.Value = BuildBlocksSet.Blue;
 redTeam.Build.BlocksSet.Value = BuildBlocksSet.Red;
 
 // ������ ���� ������� ������
-var maxDeaths = Players.MaxCount * 5;
 redTeam.Properties.Get("Deaths").Value = maxDeaths;
 blueTeam.Properties.Get("Deaths").Value = maxDeaths;
 // ������ ��� �������� � �����������
@@ -72,7 +71,6 @@ Teams.OnRequestJoinTeam.Add(function (player, team) { team.Add(player); });
 Teams.OnPlayerChangeTeam.Add(function (player) { player.Spawns.Spawn() });
 
 // бессмертие после респавна
-var immortalityTimerName = "immortality";
 Spawns.GetContext().OnSpawn.Add(function (player) {
 	player.Properties.Immortality.Value = true;
 	player.Timers.Get(immortalityTimerName).Restart(5);
