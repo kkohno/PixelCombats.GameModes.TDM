@@ -11,7 +11,7 @@ export const BLUE_TEAM_COLOR = new Color(0, 0, 1, 0);
 export const RED_TEAM_COLOR = new Color(1, 0, 0, 0);
 
 export function create_team_blue() {
-    Teams.Add(BLUE_TEAM_NAME, BLUE_TEAM_DISPLAY_NAME, { b: 1 });
+    Teams.Add(BLUE_TEAM_NAME, BLUE_TEAM_DISPLAY_NAME, BLUE_TEAM_COLOR);
     const team = Teams.Get(BLUE_TEAM_NAME);
     team.Spawns.SpawnPointsGroups.Add(BLUE_TEAM_SPAWN_POINTS_GROUP);
     return team;
