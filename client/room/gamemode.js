@@ -41,10 +41,10 @@ const redTeam = teams.create_team_red();
 blueTeam.Build.BlocksSet.Value = BuildBlocksSet.Blue;
 redTeam.Build.BlocksSet.Value = BuildBlocksSet.Red;
 
-// ������ ���� ������� ������
+// задаем запас смертей в каждой команде
 redTeam.Properties.Get("Deaths").Value = maxDeaths;
 blueTeam.Properties.Get("Deaths").Value = maxDeaths;
-// ������ ��� �������� � �����������
+// настраиваем параметры, которые нужно выводить в лидерборде
 LeaderBoard.PlayerLeaderBoardValues = [
 	new DisplayValueHeader("Kills", "Statistics/Kills", "Statistics/KillsShort"),
 	new DisplayValueHeader("Deaths", "Statistics/Deaths", "Statistics/DeathsShort"),
