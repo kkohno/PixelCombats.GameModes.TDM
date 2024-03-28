@@ -7,7 +7,7 @@ export function StartVote(time) {
   NewGameVote.OnResult.Add(OnVoteResult);
   
   NewGameVote.Start({
-    Variants: [],
+    Variants: [{ MapId: 0 }],
     Timer: 15,
   }, time);
 }
