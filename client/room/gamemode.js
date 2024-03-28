@@ -1,14 +1,13 @@
 import { DisplayValueHeader } from 'pixel_combats/basic';
-import { Game, Players, Inventory, LeaderBoard, BuildBlocksSet, Teams, Damage, BreackGraph, Ui, Properties, GameMode, Spawns, Timers, TeamsBalancer } from 'pixel_combats/room';
+import { Game, Players, Inventory, LeaderBoard, BuildBlocksSet, Teams, Damage, BreackGraph, Ui, Properties, GameMode, Spawns, Timers, TeamsBalancer, NewGame, NewGameVote } from 'pixel_combats/room';
 import * as teams from './default_teams.js';
-//var Color = importNamespace('PixelCombats.ScriptingApi.Structures');
-//var System = importNamespace('System');
 
 // настройки
 const WaitingPlayersTime = 10;
 const BuildBaseTime = 30;
 const GameModeTime = 600;
-const EndOfMatchTime = 10;
+const EndOfMatchTime = 8;
+const VoteTime = 10;
 const maxDeaths = Players.MaxCount * 5;
 
 // имена используемых объектов
@@ -23,7 +22,7 @@ const mainTimer = Timers.GetContext().Get("Main");
 const stateProp = Properties.GetContext().Get("State");
 
 // применяем параметры конструктора режима
-Damage.FriendlyFire = GameMode.Parameters.GetBool("FriendlyFire");
+Damage.GetContext().FriendlyFire.Value = GameMode.Parameters.GetBool("FriendlyFire");
 Map.Rotation = GameMode.Parameters.GetBool("MapRotation");
 BreackGraph.OnlyPlayerBlocksDmg = GameMode.Parameters.GetBool("PartialDesruction");
 BreackGraph.WeakBlocks = GameMode.Parameters.GetBool("LoosenBlocks");
@@ -73,7 +72,7 @@ Teams.OnPlayerChangeTeam.Add(function (player) { player.Spawns.Spawn() });
 // бессмертие после респавна
 Spawns.GetContext().OnSpawn.Add(function (player) {
 	player.Properties.Immortality.Value = true;
-	player.Timers.Get(immortalityTimerName).Restart(5);
+	player.Timers.Get(immortalityTimerName).Restart(3);
 });
 Timers.OnPlayerTimer.Add(function (timer) {
 	if (timer.Id != immortalityTimerName) return;
@@ -121,7 +120,7 @@ mainTimer.OnTimer.Add(function () {
 			SetEndOfMatchMode();
 			break;
 		case EndOfMatchStateValue:
-			RestartGame();
+			start_vote();
 			break;
 	}
 });
@@ -184,13 +183,22 @@ function SetEndOfMatchMode() {
 	Game.GameOver(LeaderBoard.GetTeams());
 	mainTimer.Restart(EndOfMatchTime);
 }
-function RestartGame() {
-	Game.RestartGame();
+
+function OnVoteResult(v) {
+	if(v.Result === null)return;
+	NewGame.RestartGame(v.Result);
+}
+
+function start_vote() {
+	NewGameVote.OnResult.Add(OnVoteResult);
+	NewGameVote.Start({
+		Variants: [{ MapId: 0 }],
+		Timer: VoteTime
+	}, 3);
 }
 
 function SpawnTeams() {
 	for (const team of Teams)
 		Spawns.GetContext(team).Spawn();
 }
-
 
