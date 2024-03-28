@@ -3,14 +3,13 @@ import { NewGame, NewGameVote } from 'pixel_combats/room'
 // Библиотека для старта голосования за новую карту
 // Можно вшить в свой режим
 
-export function StartVote() {
-  NewGameVote.OnData.Add(OnVoteData);
+export function StartVote(time) {
   NewGameVote.OnResult.Add(OnVoteResult);
   
   NewGameVote.Start({
     Variants: [],
     Timer: 15,
-  }, 10);
+  }, time);
 }
 
 function OnVoteResult(vote) {

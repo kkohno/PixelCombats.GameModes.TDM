@@ -10,6 +10,7 @@ const WaitingPlayersTime = 10;
 const BuildBaseTime = 30;
 const GameModeTime = 600;
 const EndOfMatchTime = 10;
+const VoteTime = 30;
 const maxDeaths = Players.MaxCount * 5;
 
 // имена используемых объектов
@@ -122,7 +123,9 @@ mainTimer.OnTimer.Add(function () {
 			SetEndOfMatchMode();
 			break;
 		case EndOfMatchStateValue:
-			SetVoteNewMap()
+		  if (GameMode.Parameters.GetBool("MapRotation"))
+			  SetVoteNewMap();
+			else SetStateRestart();
 			break;
 	}
 });
@@ -189,7 +192,11 @@ function SetEndOfMatchMode() {
 }
 
 function SetVoteNewMap() {
-  voteUtils.StartVote() 
+  voteUtils.StartVote(VoteTime) 
+}
+
+function SetStateRestart() {
+  Game.RestartGame()
 }
 
 function SpawnTeams() {
