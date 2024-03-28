@@ -1,6 +1,7 @@
 import { DisplayValueHeader } from 'pixel_combats/basic';
 import { Game, Players, Inventory, LeaderBoard, BuildBlocksSet, Teams, Damage, BreackGraph, Ui, Properties, GameMode, Spawns, Timers, TeamsBalancer } from 'pixel_combats/room';
 import * as teams from './default_teams.js';
+import * as voteUtils from './voteUtils.js'
 //var Color = importNamespace('PixelCombats.ScriptingApi.Structures');
 //var System = importNamespace('System');
 
@@ -121,7 +122,7 @@ mainTimer.OnTimer.Add(function () {
 			SetEndOfMatchMode();
 			break;
 		case EndOfMatchStateValue:
-			RestartGame();
+			SetVoteNewMap()
 			break;
 	}
 });
@@ -151,6 +152,7 @@ function SetBuildMode() {
 	Spawns.GetContext().enable = true;
 	SpawnTeams();
 }
+
 function SetGameMode() {
 	stateProp.Value = GameStateValue;
 	Ui.GetContext().Hint.Value = "Hint/AttackEnemies";
@@ -174,6 +176,7 @@ function SetGameMode() {
 	Spawns.GetContext().Despawn();
 	SpawnTeams();
 }
+
 function SetEndOfMatchMode() {
 	stateProp.Value = EndOfMatchStateValue;
 	Ui.GetContext().Hint.Value = "Hint/EndOfMatch";
@@ -184,13 +187,13 @@ function SetEndOfMatchMode() {
 	Game.GameOver(LeaderBoard.GetTeams());
 	mainTimer.Restart(EndOfMatchTime);
 }
-function RestartGame() {
-	Game.RestartGame();
+
+function SetVoteNewMap() {
+  voteUtils.StartVote() 
 }
 
 function SpawnTeams() {
 	for (const team of Teams)
 		Spawns.GetContext(team).Spawn();
 }
-
 
