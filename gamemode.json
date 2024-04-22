@@ -20,7 +20,7 @@
       {
         "Name": "MapRotation",
         "DisplayName": "GmParams/MapRotation",
-        "Default": true,
+        "Default": true
       },
       {
         "Name": "OnlyKnives",
