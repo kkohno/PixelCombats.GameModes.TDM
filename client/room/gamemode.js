@@ -7,7 +7,7 @@ const WaitingPlayersTime = 10;
 const BuildBaseTime = 30;
 const GameModeTime = 600;
 const EndOfMatchTime = 8;
-const VoteTime = 30;
+const VoteTime = 15;
 const maxDeaths = Players.MaxCount * 5;
 
 // имена используемых объектов
@@ -23,7 +23,7 @@ const stateProp = Properties.GetContext().Get("State");
 
 // применяем параметры конструктора режима
 Damage.GetContext().FriendlyFire.Value = GameMode.Parameters.GetBool("FriendlyFire");
-//Map.Rotation = GameMode.Parameters.GetBool("MapRotation");
+const MapRotation = GameMode.Parameters.GetBool("MapRotation");
 BreackGraph.OnlyPlayerBlocksDmg = GameMode.Parameters.GetBool("PartialDesruction");
 BreackGraph.WeakBlocks = GameMode.Parameters.GetBool("LoosenBlocks");
 
@@ -194,7 +194,7 @@ function start_vote() {
 	NewGameVote.Start({
 		Variants: [{ MapId: 0 }],
 		Timer: VoteTime
-	}, 3);
+	}, MapRotation ? 3 : 0);
 }
 
 function SpawnTeams() {
