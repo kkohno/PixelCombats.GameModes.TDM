@@ -23,7 +23,7 @@ const stateProp = Properties.GetContext().Get("State");
 
 // применяем параметры конструктора режима
 Damage.GetContext().FriendlyFire.Value = GameMode.Parameters.GetBool("FriendlyFire");
-Map.Rotation = GameMode.Parameters.GetBool("MapRotation");
+//Map.Rotation = GameMode.Parameters.GetBool("MapRotation");
 BreackGraph.OnlyPlayerBlocksDmg = GameMode.Parameters.GetBool("PartialDesruction");
 BreackGraph.WeakBlocks = GameMode.Parameters.GetBool("LoosenBlocks");
 
