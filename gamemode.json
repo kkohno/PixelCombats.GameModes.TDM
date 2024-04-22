@@ -19,7 +19,8 @@
     "Bool": [
       {
         "Name": "MapRotation",
-        "DisplayName": "GmParams/MapRotation"
+        "DisplayName": "GmParams/MapRotation",
+        "Default": true,
       },
       {
         "Name": "OnlyKnives",
