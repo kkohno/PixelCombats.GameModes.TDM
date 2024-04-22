@@ -7,7 +7,7 @@ const WaitingPlayersTime = 10;
 const BuildBaseTime = 30;
 const GameModeTime = 600;
 const EndOfMatchTime = 8;
-const VoteTime = 15;
+const VoteTime = 30;
 const maxDeaths = Players.MaxCount * 5;
 
 // имена используемых объектов
