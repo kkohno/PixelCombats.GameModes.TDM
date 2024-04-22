@@ -18,6 +18,10 @@
   "Parameters": {
     "Bool": [
       {
+        "Name": "MapRotation",
+        "DisplayName": "GmParams/MapRotation"
+      },
+      {
         "Name": "OnlyKnives",
         "DisplayName": "GmParams/OnlyKnives"
       },
