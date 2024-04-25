@@ -5,7 +5,7 @@ import * as teams from './default_teams.js';
 // настройки
 const WaitingPlayersTime = 10;
 const BuildBaseTime = 30;
-const GameModeTime = 600;
+const GameModeTime = 300;
 const EndOfMatchTime = 8;
 const VoteTime = 30;
 const maxDeaths = Players.MaxCount * 5;
