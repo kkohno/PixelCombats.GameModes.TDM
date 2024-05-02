@@ -29,6 +29,7 @@ const MapRotation = GameMode.Parameters.GetBool("MapRotation");
 BreackGraph.OnlyPlayerBlocksDmg = GameMode.Parameters.GetBool("PartialDesruction");
 BreackGraph.WeakBlocks = GameMode.Parameters.GetBool("LoosenBlocks");
 BreackGraph.PlayerBlockBoost = GameMode.Parameters.GetBool("PlayerBlockBoost");
+BreackGraph.OnlyPlayerBlocksDmg = GameMode.Parameters.GetBool("OnlyPlayerBlocksDmg");
 
 // ���� ������ ������ ������
 BreackGraph.PlayerBlockBoost = true;

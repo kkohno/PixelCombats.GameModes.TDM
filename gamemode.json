@@ -39,6 +39,10 @@
         "DisplayName": "GmParams/PlayerBlockBoost"
       },
       {
+        "Name": "OnlyPlayerBlocksDmg",
+        "DisplayName": "GmParams/OnlyPlayerBlocksDmg"
+      },
+      {
         "Name": "FriendlyFire",
         "DisplayName": "GmParams/FriendlyFire"
       }
