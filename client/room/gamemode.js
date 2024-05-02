@@ -8,7 +8,7 @@ const BuildBaseTime = 30;
 const KnivesModeTime = 60;
 const GameModeTime = 300;
 const EndOfMatchTime = 8;
-const VoteTime = 30;
+const VoteTime = 20;
 const maxDeaths = Players.MaxCount * 5;
 
 // имена используемых объектов
