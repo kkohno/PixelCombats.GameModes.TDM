@@ -35,6 +35,10 @@
         "DisplayName": "GmParams/LoosenBlocks"
       },
       {
+        "Name": "PlayerBlockBoost",
+        "DisplayName": "GmParams/PlayerBlockBoost"
+      },
+      {
         "Name": "FriendlyFire",
         "DisplayName": "GmParams/FriendlyFire"
       }
