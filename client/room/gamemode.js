@@ -5,7 +5,7 @@ import * as teams from './default_teams.js';
 // настройки
 const WaitingPlayersTime = 10;
 const BuildBaseTime = 30;
-const KnivesModeTime = 60;
+const KnivesModeTime = 40;
 const GameModeTime = 300;
 const EndOfMatchTime = 8;
 const VoteTime = 20;
@@ -26,12 +26,10 @@ const stateProp = Properties.GetContext().Get("State");
 // применяем параметры конструктора режима
 Damage.GetContext().FriendlyFire.Value = GameMode.Parameters.GetBool("FriendlyFire");
 const MapRotation = GameMode.Parameters.GetBool("MapRotation");
-BreackGraph.OnlyPlayerBlocksDmg = GameMode.Parameters.GetBool("PartialDesruction");
 BreackGraph.WeakBlocks = GameMode.Parameters.GetBool("LoosenBlocks");
-BreackGraph.PlayerBlockBoost = GameMode.Parameters.GetBool("PlayerBlockBoost");
 BreackGraph.OnlyPlayerBlocksDmg = GameMode.Parameters.GetBool("OnlyPlayerBlocksDmg");
 
-// ���� ������ ������ ������
+// бустим блоки игрока
 BreackGraph.PlayerBlockBoost = true;
 
 // ��������� ����

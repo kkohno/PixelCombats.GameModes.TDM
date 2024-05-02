@@ -27,20 +27,12 @@
         "DisplayName": "GmParams/OnlyKnives"
       },
       {
-        "Name": "PartialDesruction",
-        "DisplayName": "GmParams/PartialDesruction"
+        "Name": "OnlyPlayerBlocksDmg",
+        "DisplayName": "GmParams/OnlyPlayerBlocksDmg"
       },
       {
         "Name": "LoosenBlocks",
         "DisplayName": "GmParams/LoosenBlocks"
-      },
-      {
-        "Name": "PlayerBlockBoost",
-        "DisplayName": "GmParams/PlayerBlockBoost"
-      },
-      {
-        "Name": "OnlyPlayerBlocksDmg",
-        "DisplayName": "GmParams/OnlyPlayerBlocksDmg"
       },
       {
         "Name": "FriendlyFire",
