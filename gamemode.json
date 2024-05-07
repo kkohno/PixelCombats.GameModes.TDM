@@ -39,5 +39,26 @@
         "DisplayName": "GmParams/FriendlyFire"
       }
     ]
-  }
+  },
+  "Dropdown": [
+    {
+      "Name": "Length",
+      "DisplayName": "GmParams/Length",
+      "Default": "Normal",
+      "Variants": [
+        {
+          "Name": "Short",
+          "DisplayName": "GmParams/Short"
+        },
+        {
+          "Name": "Normal",
+          "DisplayName": "GmParams/Normal"
+        },
+        {
+          "Name": "Big",
+          "DisplayName": "GmParams/Big"
+        }
+      ]
+    }
+  ]
 }
