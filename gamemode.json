@@ -20,23 +20,28 @@
       {
         "Name": "MapRotation",
         "DisplayName": "GmParams/MapRotation",
-        "Default": true
+        "Default": true,
+        "Order": 1
       },
       {
         "Name": "OnlyKnives",
-        "DisplayName": "GmParams/OnlyKnives"
+        "DisplayName": "GmParams/OnlyKnives",
+        "Order": 3
       },
       {
         "Name": "OnlyPlayerBlocksDmg",
-        "DisplayName": "GmParams/OnlyPlayerBlocksDmg"
+        "DisplayName": "GmParams/OnlyPlayerBlocksDmg",
+        "Order": 4
       },
       {
         "Name": "LoosenBlocks",
-        "DisplayName": "GmParams/LoosenBlocks"
+        "DisplayName": "GmParams/LoosenBlocks",
+        "Order": 6
       },
       {
         "Name": "FriendlyFire",
-        "DisplayName": "GmParams/FriendlyFire"
+        "DisplayName": "GmParams/FriendlyFire",
+        "Order": 5
       }
     ],
     "Dropdown": [
@@ -44,7 +49,7 @@
         "Name": "Length",
         "DisplayName": "GmParams/Length",
         "Default": "Normal",
-        "Order": 1,
+        "Order": 2,
         "Variants": [
           {
             "Name": "Short",
