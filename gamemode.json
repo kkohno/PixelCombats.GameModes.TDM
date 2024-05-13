@@ -44,7 +44,7 @@
         "Name": "Length",
         "DisplayName": "GmParams/Length",
         "Default": "Normal",
-        "Order": -1,
+        "Order": 1,
         "Variants": [
           {
             "Name": "Short",
