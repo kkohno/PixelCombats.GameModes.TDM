@@ -16,8 +16,11 @@ const WaitingStateValue = "Waiting";
 const BuildModeStateValue = "BuildMode";
 const KnivesModeStateValue = "KnivesMode";
 const GameStateValue = "Game";
+const MockModeStateValue = "MockMode";
 const EndOfMatchStateValue = "EndOfMatch";
 const immortalityTimerName = "immortality"; // имя таймера, используемого в контексте игрока, для его бессмертия
+
+const mockTime = 20;
 
 // получаем объекты, с которыми работает режим
 const mainTimer = Timers.GetContext().Get("Main");
@@ -73,6 +76,10 @@ Teams.OnPlayerChangeTeam.Add(function (player) { player.Spawns.Spawn() });
 
 // бессмертие после респавна
 Spawns.GetContext().OnSpawn.Add(function (player) {
+	if (stateProp.Value == MockModeStateValue) {
+		player.Properties.Immortality.Value = false;
+		return;
+	}
 	player.Properties.Immortality.Value = true;
 	player.Timers.Get(immortalityTimerName).Restart(3);
 });
@@ -93,16 +100,19 @@ Properties.OnTeamProperty.Add(function (context, value) {
 	if (value.Value <= 0) SetEndOfMatchMode();
 });
 
-// ������� �������
+// обработчик спавнов
 Spawns.OnSpawn.Add(function (player) {
+	if (stateProp.Value == MockModeStateValue) return;
 	++player.Properties.Spawns.Value;
 });
-// ������� �������
+// обработчик смертей
 Damage.OnDeath.Add(function (player) {
+	if (stateProp.Value == MockModeStateValue) return;
 	++player.Properties.Deaths.Value;
 });
-// ������� �������
+// обработчик убийств
 Damage.OnKill.Add(function (player, killed) {
+	if (stateProp.Value == MockModeStateValue) return;
 	if (killed.Team != null && killed.Team != player.Team) {
 		++player.Properties.Kills.Value;
 		player.Properties.Scores.Value += 100;
@@ -122,7 +132,10 @@ mainTimer.OnTimer.Add(function () {
 			SetGameMode();
 			break;
 		case GameStateValue:
-			SetEndOfMatchMode();
+			SetEndOfMatch();
+			break;
+		case MockModeStateValue:
+			SetEndOfMatch_EndMode();
 			break;
 		case EndOfMatchStateValue:
 			start_vote();
@@ -197,7 +210,34 @@ function SetGameMode() {
 	Spawns.GetContext().Despawn();
 	SpawnTeams();
 }
+
 function SetEndOfMatchMode() {
+	const leaderboard = LeaderBoard.GetTeams();
+	if (leaderboard[0].Weight != leaderboard[1].Weight) {
+		SetEndOfMatch_MockMode(leaderboard[0].Team, leaderboard[1].Weight);
+	}
+	else {
+		SetEndOfMatch_EndMode();
+	}
+}
+function SetEndOfMatch_MockMode(winners, loosers) {
+	stateProp.Value = MockModeStateValue;
+	// разрешаем нанесение урона
+	Damage.GetContext().DamageOut.Value = true;
+	stateProp.Value = GameStateValue;
+	Ui.GetContext(winners).Hint.Value = "Hint/MockHintForWinners";
+	Ui.GetContext(loosers).Hint.Value = "Hint/MockHintForLoosers";
+
+	const inventory = Inventory.GetContext(loosers);
+	inventory.Main.Value = false;
+	inventory.Secondary.Value = false;
+	inventory.Melee.Value = false;
+	inventory.Explosive.Value = false;
+	inventory.Build.Value = true;
+
+	mainTimer.Restart(mockTime);
+}
+function SetEndOfMatch_EndMode() {
 	stateProp.Value = EndOfMatchStateValue;
 	Ui.GetContext().Hint.Value = "Hint/EndOfMatch";
 
