@@ -3,20 +3,20 @@ import { Game, Players, Inventory, LeaderBoard, BuildBlocksSet, Teams, Damage, B
 import * as teams from './default_teams.js';
 
 // настройки
-const WaitingPlayersTime = 10;
-const BuildBaseTime = 30;
-const KnivesModeTime = 40;
-const GameModeTime = 300;
-const EndOfMatchTime = 8;
-const VoteTime = 20;
+const WaitingPlayersTime = 1;
+const BuildBaseTime = 1;
+const KnivesModeTime = 1;
+const GameModeTime = 1;
+const EndOfMatchTime = 3;
+const VoteTime = 5;
 const maxDeaths = Players.MaxCount * 5;
 
 // имена используемых объектов
-const WaitingStateValue = "Waiting";
-const BuildModeStateValue = "BuildMode";
-const KnivesModeStateValue = "KnivesMode";
-const GameStateValue = "Game";
-const EndOfMatchStateValue = "EndOfMatch";
+const WaitingStateValue = "Ждём";
+const BuildModeStateValue = "Строим";
+const KnivesModeStateValue = "Режим";
+const GameStateValue = "Игра";
+const EndOfMatchStateValue = "Забери награду!";
 const immortalityTimerName = "immortality"; // имя таймера, используемого в контексте игрока, для его бессмертия
 
 // получаем объекты, с которыми работает режим
