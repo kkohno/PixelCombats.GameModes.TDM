@@ -7,7 +7,7 @@ const WaitingPlayersTime = 10;
 const BuildBaseTime = 30;
 const KnivesModeTime = 40;
 const GameModeTime = 300;
-const MockModeTime = 20;
+const MockModeTime = 30;
 const EndOfMatchTime = 8;
 const VoteTime = 20;
 const maxDeaths = Players.MaxCount * 5;
@@ -106,7 +106,10 @@ Spawns.OnSpawn.Add(function (player) {
 });
 // обработчик смертей
 Damage.OnDeath.Add(function (player) {
-	if (stateProp.Value == MockModeStateValue) return;
+	if (stateProp.Value == MockModeStateValue) {
+		Spawns.GetContext(player).Spawn();
+		return;
+	}
 	++player.Properties.Deaths.Value;
 });
 // обработчик убийств
@@ -220,20 +223,35 @@ function SetEndOfMatch() {
 	}
 }
 function SetEndOfMatch_MockMode(winners, loosers) {
+	// задаем состояние игры
 	stateProp.Value = MockModeStateValue;
-	// разрешаем нанесение урона
-	Damage.GetContext().DamageOut.Value = true;
-	stateProp.Value = GameStateValue;
+
+	// подсказка
 	Ui.GetContext(winners).Hint.Value = "Hint/MockHintForWinners";
 	Ui.GetContext(loosers).Hint.Value = "Hint/MockHintForLoosers";
 
-	const inventory = Inventory.GetContext(loosers);
+	// разрешаем нанесение урона
+	Damage.GetContext().DamageOut.Value = true;
+	// время спавна
+	Spawns.GetContext().RespawnTime.Value = 0;
+
+	// set loosers
+	var inventory = Inventory.GetContext(loosers);
 	inventory.Main.Value = false;
 	inventory.Secondary.Value = false;
 	inventory.Melee.Value = false;
 	inventory.Explosive.Value = false;
-	inventory.Build.Value = true;
+	inventory.Build.Value = false;
 
+	// set winners
+	var inventory = Inventory.GetContext(winners);
+	inventory.MainInfinity.Value = true;
+	inventory.SecondaryInfinity.Value = true;
+	inventory.MeleeInfinity.Value = true;
+	inventory.ExplosiveInfinity.Value = true;
+	inventory.BuildInfinity.Value = true;
+
+	// перезапуск таймера мода
 	mainTimer.Restart(MockModeTime);
 }
 function SetEndOfMatch_EndMode() {
