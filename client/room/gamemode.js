@@ -244,10 +244,9 @@ function SetEndOfMatch_MockMode(winners, loosers) {
 	inventory.Build.Value = false;
 
 	// set winners
-	var inventory = Inventory.GetContext(winners);
+	inventory = Inventory.GetContext(winners);
 	inventory.MainInfinity.Value = true;
 	inventory.SecondaryInfinity.Value = true;
-	inventory.MeleeInfinity.Value = true;
 	inventory.ExplosiveInfinity.Value = true;
 	inventory.BuildInfinity.Value = true;
 
