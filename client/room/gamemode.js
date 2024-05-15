@@ -7,6 +7,7 @@ const WaitingPlayersTime = 10;
 const BuildBaseTime = 30;
 const KnivesModeTime = 40;
 const GameModeTime = 300;
+const MockModeTime = 20;
 const EndOfMatchTime = 8;
 const VoteTime = 20;
 const maxDeaths = Players.MaxCount * 5;
@@ -19,8 +20,6 @@ const GameStateValue = "Game";
 const MockModeStateValue = "MockMode";
 const EndOfMatchStateValue = "EndOfMatch";
 const immortalityTimerName = "immortality"; // имя таймера, используемого в контексте игрока, для его бессмертия
-
-const mockTime = 20;
 
 // получаем объекты, с которыми работает режим
 const mainTimer = Timers.GetContext().Get("Main");
@@ -97,7 +96,7 @@ Properties.OnPlayerProperty.Add(function (context, value) {
 // ���� � ������� ���������� ������� ���������� �� ��������� ����
 Properties.OnTeamProperty.Add(function (context, value) {
 	if (value.Name !== "Deaths") return;
-	if (value.Value <= 0) SetEndOfMatchMode();
+	if (value.Value <= 0) SetEndOfMatch();
 });
 
 // обработчик спавнов
@@ -211,7 +210,7 @@ function SetGameMode() {
 	SpawnTeams();
 }
 
-function SetEndOfMatchMode() {
+function SetEndOfMatch() {
 	const leaderboard = LeaderBoard.GetTeams();
 	if (leaderboard[0].Weight != leaderboard[1].Weight) {
 		SetEndOfMatch_MockMode(leaderboard[0].Team, leaderboard[1].Weight);
@@ -235,7 +234,7 @@ function SetEndOfMatch_MockMode(winners, loosers) {
 	inventory.Explosive.Value = false;
 	inventory.Build.Value = true;
 
-	mainTimer.Restart(mockTime);
+	mainTimer.Restart(MockModeTime);
 }
 function SetEndOfMatch_EndMode() {
 	stateProp.Value = EndOfMatchStateValue;
