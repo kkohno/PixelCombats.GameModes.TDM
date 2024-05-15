@@ -248,7 +248,7 @@ function SetEndOfMatch_MockMode(winners, loosers) {
 	inventory.MainInfinity.Value = true;
 	inventory.SecondaryInfinity.Value = true;
 	inventory.ExplosiveInfinity.Value = true;
-	//inventory.BuildInfinity.Value = true;
+	inventory.BuildInfinity.Value = true;
 
 	// перезапуск таймера мода
 	mainTimer.Restart(MockModeTime);
