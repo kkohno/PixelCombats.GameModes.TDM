@@ -212,8 +212,8 @@ function SetGameMode() {
 
 function SetEndOfMatch() {
 	const leaderboard = LeaderBoard.GetTeams();
-	if (leaderboard[0].Weight != leaderboard[1].Weight) {
-		SetEndOfMatch_MockMode(leaderboard[0].Team, leaderboard[1].Weight);
+	if (leaderboard[0].Weight !== leaderboard[1].Weight) {
+		SetEndOfMatch_MockMode(leaderboard[0].Team, leaderboard[1].Team);
 	}
 	else {
 		SetEndOfMatch_EndMode();
