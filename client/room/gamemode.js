@@ -250,6 +250,9 @@ function SetEndOfMatch_MockMode(winners, loosers) {
 	inventory.ExplosiveInfinity.Value = true;
 	inventory.BuildInfinity.Value = true;
 
+	// френдли фаер для победивших
+	//Damage.GetContext(winners).FriendlyFire.Value = true;
+
 	// перезапуск таймера мода
 	mainTimer.Restart(MockModeTime);
 }
