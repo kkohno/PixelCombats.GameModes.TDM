@@ -233,7 +233,7 @@ function SetEndOfMatch_MockMode(winners, loosers) {
 	// разрешаем нанесение урона
 	Damage.GetContext().DamageOut.Value = true;
 	// время спавна
-	Spawns.GetContext().RespawnTime.Value = 0;
+	Spawns.GetContext().RespawnTime.Value = 2;
 
 	// set loosers
 	var inventory = Inventory.GetContext(loosers);
