@@ -26,17 +26,17 @@
       {
         "Name": "OnlyKnives",
         "DisplayName": "GmParams/OnlyKnives",
-        "Order": 3
+        "Order": 2
       },
       {
         "Name": "OnlyPlayerBlocksDmg",
         "DisplayName": "GmParams/OnlyPlayerBlocksDmg",
-        "Order": 4
+        "Order": 3
       },
       {
         "Name": "LoosenBlocks",
         "DisplayName": "GmParams/LoosenBlocks",
-        "Order": 6
+        "Order": 4
       },
       {
         "Name": "FriendlyFire",
@@ -49,7 +49,7 @@
         "Name": "Length",
         "DisplayName": "GmParams/Length",
         "Default": "Normal",
-        "Order": 2,
+        "Order": 6,
         "Variants": [
           {
             "Name": "Short",
