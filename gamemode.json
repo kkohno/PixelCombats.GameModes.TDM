@@ -1,7 +1,7 @@
 {
-  "Name": "TDM (V2)",
+  "Name": "TDM",
   "Description": "Team Death Match. Битва двух команд",
-  "StartClientVersion": 532,
+  "StartClientVersion": 568,
   "MapFilter": {
     "IsBlank": false,
     "HasParcourEnd": false
