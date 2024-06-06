@@ -35,7 +35,7 @@ BreackGraph.OnlyPlayerBlocksDmg = GameMode.Parameters.GetBool("OnlyPlayerBlocksD
 // бустим блоки игрока
 BreackGraph.PlayerBlockBoost = true;
 
-// ��������� ����
+// имя игрового режима (устарело)
 Properties.GetContext().GameModeName.Value = "GameModes/Team Dead Match";
 TeamsBalancer.IsAutoBalance = true;
 Ui.GetContext().MainTimerId.Value = mainTimer.Id;
