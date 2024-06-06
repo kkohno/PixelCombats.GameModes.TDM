@@ -21,6 +21,7 @@ const GameStateValue = "Game";
 const MockModeStateValue = "MockMode";
 const EndOfMatchStateValue = "EndOfMatch";
 const immortalityTimerName = "immortality"; // имя таймера, используемого в контексте игрока, для его бессмертия
+const KILLS_PROP_NAME = "Kills";
 
 // получаем объекты, с которыми работает режим
 const mainTimer = Timers.GetContext().Get("Main");
@@ -35,7 +36,7 @@ BreackGraph.OnlyPlayerBlocksDmg = GameMode.Parameters.GetBool("OnlyPlayerBlocksD
 // бустим блоки игрока
 BreackGraph.PlayerBlockBoost = true;
 
-// ��������� ����
+// имя игрового режима (устарело)
 Properties.GetContext().GameModeName.Value = "GameModes/Team Dead Match";
 TeamsBalancer.IsAutoBalance = true;
 Ui.GetContext().MainTimerId.Value = mainTimer.Id;
@@ -45,33 +46,34 @@ const redTeam = teams.create_team_red();
 blueTeam.Build.BlocksSet.Value = BuildBlocksSet.Blue;
 redTeam.Build.BlocksSet.Value = BuildBlocksSet.Red;
 
-// задаем запас смертей в каждой команде
-redTeam.Properties.Get("Deaths").Value = maxDeaths;
-blueTeam.Properties.Get("Deaths").Value = maxDeaths;
 // настраиваем параметры, которые нужно выводить в лидерборде
 LeaderBoard.PlayerLeaderBoardValues = [
-	new DisplayValueHeader("Kills", "Statistics/Kills", "Statistics/KillsShort"),
+	new DisplayValueHeader(KILLS_PROP_NAME, "Statistics/Kills", "Statistics/KillsShort"),
 	new DisplayValueHeader("Deaths", "Statistics/Deaths", "Statistics/DeathsShort"),
 	new DisplayValueHeader("Spawns", "Statistics/Spawns", "Statistics/SpawnsShort"),
 	new DisplayValueHeader("Scores", "Statistics/Scores", "Statistics/ScoresShort")
 ];
-LeaderBoard.TeamLeaderBoardValue = new DisplayValueHeader("Deaths", "Statistics\Deaths", "Statistics\Deaths");
-// ��� ������� � ����������
+LeaderBoard.TeamLeaderBoardValue = new DisplayValueHeader(KILLS_PROP_NAME, "Statistics\Kills", "Statistics\Kills");
+// задаем сортировку команд для списка лидирующих
 LeaderBoard.TeamWeightGetter.Set(function (team) {
-	return team.Properties.Get("Deaths").Value;
+	return team.Properties.Get("Kills").Value;
 });
-// ��� ������ � ����������
+// задаем сортировку игроков для списка лидирующих
 LeaderBoard.PlayersWeightGetter.Set(function (player) {
 	return player.Properties.Get("Kills").Value;
 });
 
-// ������ ��� �������� ������
-Ui.GetContext().TeamProp1.Value = { Team: "Blue", Prop: "Deaths" };
-Ui.GetContext().TeamProp2.Value = { Team: "Red", Prop: "Deaths" };
+// отображаем изначально нули в килах команд
+redTeam.Properties.Get(KILLS_PROP_NAME).Value = 0;
+blueTeam.Properties.Get(KILLS_PROP_NAME).Value = 0;
 
-// ��������� ���� � ������� �� �������
+// отображаем значения вверху экрана
+Ui.GetContext().TeamProp1.Value = { Team: "Blue", Prop: KILLS_PROP_NAME };
+Ui.GetContext().TeamProp2.Value = { Team: "Red", Prop: KILLS_PROP_NAME};
+
+// при запросе смены команды игрока - добавляем его в запрашиваемую команду
 Teams.OnRequestJoinTeam.Add(function (player, team) { team.Add(player); });
-// ����� �� ����� � �������
+// при запросе спавна игрока - спавним его
 Teams.OnPlayerChangeTeam.Add(function (player) { player.Spawns.Spawn() });
 
 // бессмертие после респавна
@@ -88,16 +90,11 @@ Timers.OnPlayerTimer.Add(function (timer) {
 	timer.Player.Properties.Immortality.Value = false;
 });
 
-// ����� ������ ������ ������ �������� ���� ������ � �������
+// отработка изменения свойств игроков
 Properties.OnPlayerProperty.Add(function (context, value) {
-	if (value.Name !== "Deaths") return;
+	if (value.Name !== KILLS_PROP_NAME) return;
 	if (context.Player.Team == null) return;
-	context.Player.Team.Properties.Get("Deaths").Value--;
-});
-// ���� � ������� ���������� ������� ���������� �� ��������� ����
-Properties.OnTeamProperty.Add(function (context, value) {
-	if (value.Name !== "Deaths") return;
-	if (value.Value <= 0) SetEndOfMatch();
+	context.Player.Team.Properties.Get(KILLS_PROP_NAME).Value++;
 });
 
 // обработчик спавнов
