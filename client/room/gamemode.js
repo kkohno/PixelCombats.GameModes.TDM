@@ -88,13 +88,13 @@ Timers.OnPlayerTimer.Add(function (timer) {
 	timer.Player.Properties.Immortality.Value = false;
 });
 
-// ����� ������ ������ ������ �������� ���� ������ � �������
+// отработка изменения свойств игроков
 Properties.OnPlayerProperty.Add(function (context, value) {
 	if (value.Name !== "Deaths") return;
 	if (context.Player.Team == null) return;
 	context.Player.Team.Properties.Get("Deaths").Value--;
 });
-// ���� � ������� ���������� ������� ���������� �� ��������� ����
+// отработка изменения свойств команд
 Properties.OnTeamProperty.Add(function (context, value) {
 	if (value.Name !== "Deaths") return;
 	if (value.Value <= 0) SetEndOfMatch();
