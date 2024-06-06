@@ -63,6 +63,10 @@ LeaderBoard.PlayersWeightGetter.Set(function (player) {
 	return player.Properties.Get("Kills").Value;
 });
 
+// отображаем изначально нули в килах команд
+redTeam.Properties.Get(KILLS_PROP_NAME).Value = 0;
+blueTeam.Properties.Get(KILLS_PROP_NAME).Value = 0;
+
 // отображаем значения вверху экрана
 Ui.GetContext().TeamProp1.Value = { Team: "Blue", Prop: KILLS_PROP_NAME };
 Ui.GetContext().TeamProp2.Value = { Team: "Red", Prop: KILLS_PROP_NAME};
