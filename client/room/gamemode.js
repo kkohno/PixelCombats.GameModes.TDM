@@ -56,22 +56,22 @@ LeaderBoard.PlayerLeaderBoardValues = [
 	new DisplayValueHeader("Scores", "Statistics/Scores", "Statistics/ScoresShort")
 ];
 LeaderBoard.TeamLeaderBoardValue = new DisplayValueHeader("Deaths", "Statistics\Deaths", "Statistics\Deaths");
-// ��� ������� � ����������
+// задаем сортировку команд для списка лидирующих
 LeaderBoard.TeamWeightGetter.Set(function (team) {
 	return team.Properties.Get("Deaths").Value;
 });
-// ��� ������ � ����������
+// задаем сортировку игроков для списка лидирующих
 LeaderBoard.PlayersWeightGetter.Set(function (player) {
 	return player.Properties.Get("Kills").Value;
 });
 
-// ������ ��� �������� ������
+// отображаем значения вверху экрана
 Ui.GetContext().TeamProp1.Value = { Team: "Blue", Prop: "Deaths" };
 Ui.GetContext().TeamProp2.Value = { Team: "Red", Prop: "Deaths" };
 
-// ��������� ���� � ������� �� �������
+// при запросе смены команды игрока - добавляем его в запрашиваемую команду
 Teams.OnRequestJoinTeam.Add(function (player, team) { team.Add(player); });
-// ����� �� ����� � �������
+// при запросе спавна игрока - спавним его
 Teams.OnPlayerChangeTeam.Add(function (player) { player.Spawns.Spawn() });
 
 // бессмертие после респавна
