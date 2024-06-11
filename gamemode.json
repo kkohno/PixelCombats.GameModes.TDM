@@ -1,5 +1,5 @@
 {
-  "Name": "TDM",
+  "Name": "TDM V2",
   "Description": "Team Death Match. Битва двух команд",
   "StartClientVersion": 568,
   "MapFilter": {
@@ -48,20 +48,24 @@
       {
         "Name": "Length",
         "DisplayName": "GmParams/Length",
-        "Default": "Normal",
+        "Default": "Length_M",
         "Order": 6,
         "Variants": [
           {
-            "Name": "Short",
-            "DisplayName": "GmParams/Short"
+            "Name": "Length_S",
+            "DisplayName": "GmParams/Length_S"
           },
           {
-            "Name": "Normal",
-            "DisplayName": "GmParams/Normal"
+            "Name": "Length_M",
+            "DisplayName": "GmParams/Length_M"
           },
           {
-            "Name": "Big",
-            "DisplayName": "GmParams/Big"
+            "Name": "Length_L",
+            "DisplayName": "GmParams/Length_L"
+          },
+          {
+            "Name": "Length_XL",
+            "DisplayName": "GmParams/Length_XL"
           }
         ]
       }
