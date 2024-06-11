@@ -222,6 +222,7 @@ function SetGameMode() {
 	SpawnTeams();
 }
 function SetEndOfMatch() {
+	scores_timer.Stop(); // выключаем таймер очков
 	const leaderboard = LeaderBoard.GetTeams();
 	if (leaderboard[0].Weight !== leaderboard[1].Weight) {
 		// режим прикола вконце катки
@@ -238,6 +239,7 @@ function SetEndOfMatch() {
 function SetMockMode(winners, loosers) {
 	// задаем состояние игры
 	stateProp.Value = MockModeStateValue;
+	scores_timer.Stop(); // выключаем таймер очков
 
 	// подсказка
 	Ui.GetContext(winners).Hint.Value = "Hint/MockHintForWinners";
@@ -271,6 +273,7 @@ function SetMockMode(winners, loosers) {
 }
 function SetEndOfMatch_EndMode() {
 	stateProp.Value = EndOfMatchStateValue;
+	scores_timer.Stop(); // выключаем таймер очков
 	Ui.GetContext().Hint.Value = "Hint/EndOfMatch";
 
 	var spawns = Spawns.GetContext();
