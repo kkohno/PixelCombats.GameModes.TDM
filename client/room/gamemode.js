@@ -11,6 +11,8 @@ const GameModeTime = default_timer.game_mode_length_seconds();
 const MockModeTime = 20;
 const EndOfMatchTime = 8;
 const VoteTime = 20;
+
+const KILL_SCORES = 5;
 const WINNER_SCORES = 10;
 
 // имена используемых объектов
@@ -92,11 +94,18 @@ Timers.OnPlayerTimer.Add(function (timer) {
 	timer.Player.Properties.Immortality.Value = false;
 });
 
+function add_scores_to_player(player, scores_count) {
+	player.Properties.Scores.Value += scores_count;
+	if (stateProp.Value == MockModeStateValue) return;
+	if (player.Team != null) player.Team.Properties.Get(SCORES_PROP_NAME).Value += scores_count;
+}
+
 // отработка изменения свойств игроков
 Properties.OnPlayerProperty.Add(function (context, value) {
-	if (value.Name !== KILLS_PROP_NAME) return;
+	if (stateProp.Value == MockModeStateValue) return;
+	if (value.Name !== SCORES_PROP_NAME) return;
 	if (context.Player.Team == null) return;
-	context.Player.Team.Properties.Get(KILLS_PROP_NAME).Value++;
+	context.Player.Team.Properties.Get(SCORES_PROP_NAME).Value++;
 });
 
 // обработчик спавнов
@@ -117,7 +126,7 @@ Damage.OnKill.Add(function (player, killed) {
 	if (stateProp.Value == MockModeStateValue) return;
 	if (killed.Team != null && killed.Team != player.Team) {
 		++player.Properties.Kills.Value;
-		player.Properties.Scores.Value += 5;
+		add_scores_to_player(player, KILL_SCORES);
 	}
 });
 
@@ -215,12 +224,12 @@ function SetGameMode() {
 function SetEndOfMatch() {
 	const leaderboard = LeaderBoard.GetTeams();
 	if (leaderboard[0].Weight !== leaderboard[1].Weight) {
+		// режим прикола вконце катки
+		SetMockMode(leaderboard[0].Team, leaderboard[1].Team);
 		// добавляем очки победившим
 		for (const win_player of leaderboard[0].Team.Players) {
 			win_player.Properties.Get(SCORES_PROP_NAME).Value += WINNER_SCORES;
 		}
-		// режим прикола вконце катки
-		SetMockMode(leaderboard[0].Team, leaderboard[1].Team);
 	}
 	else {
 		SetEndOfMatch_EndMode();
