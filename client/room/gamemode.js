@@ -14,6 +14,8 @@ const VoteTime = 20;
 
 const KILL_SCORES = 5;
 const WINNER_SCORES = 10;
+const TIMER_SCORES = 5;
+const SCORES_TIMER_INTERVAL = 30;
 
 // имена используемых объектов
 const WaitingStateValue = "Waiting";
@@ -29,6 +31,7 @@ const SCORES_PROP_NAME = "Scores";
 
 // получаем объекты, с которыми работает режим
 const mainTimer = Timers.GetContext().Get("Main");
+const scores_timer = Timers.GetContext().Get("Scores");
 const stateProp = Properties.GetContext().Get("State");
 
 // применяем параметры конструктора режима
@@ -94,12 +97,6 @@ Timers.OnPlayerTimer.Add(function (timer) {
 	timer.Player.Properties.Immortality.Value = false;
 });
 
-function add_scores_to_player(player, scores_count) {
-	player.Properties.Scores.Value += scores_count;
-	if (stateProp.Value == MockModeStateValue) return;
-	if (player.Team != null) player.Team.Properties.Get(SCORES_PROP_NAME).Value += scores_count;
-}
-
 // обработчик спавнов
 Spawns.OnSpawn.Add(function (player) {
 	if (stateProp.Value == MockModeStateValue) return;
@@ -118,7 +115,18 @@ Damage.OnKill.Add(function (player, killed) {
 	if (stateProp.Value == MockModeStateValue) return;
 	if (killed.Team != null && killed.Team != player.Team) {
 		++player.Properties.Kills.Value;
-		add_scores_to_player(player, KILL_SCORES);
+		// добавляем очки кила игроку и команде
+		player.Properties.Scores.Value += KILL_SCORES;
+		if (stateProp.Value !== MockModeStateValue && player.Team != null)
+			player.Team.Properties.Get(SCORES_PROP_NAME).Value += KILL_SCORES;
+	}
+});
+
+// таймер очков за проведенное время
+scores_timer.OnTimer.Add(function () {
+	for (const player of Players.All) {
+		if (player.Team == null) continue; // если вне команд то не начисляем ничего по таймеру
+		player.Properties.Scores.Value += TIMER_SCORES;
 	}
 });
 
@@ -290,4 +298,6 @@ function SpawnTeams() {
 	for (const team of Teams)
 		Spawns.GetContext(team).Spawn();
 }
+
+scores_timer.RestartLoop(SCORES_TIMER_INTERVAL);
 
