@@ -100,14 +100,6 @@ function add_scores_to_player(player, scores_count) {
 	if (player.Team != null) player.Team.Properties.Get(SCORES_PROP_NAME).Value += scores_count;
 }
 
-// отработка изменения свойств игроков
-Properties.OnPlayerProperty.Add(function (context, value) {
-	if (stateProp.Value == MockModeStateValue) return;
-	if (value.Name !== SCORES_PROP_NAME) return;
-	if (context.Player.Team == null) return;
-	context.Player.Team.Properties.Get(SCORES_PROP_NAME).Value++;
-});
-
 // обработчик спавнов
 Spawns.OnSpawn.Add(function (player) {
 	if (stateProp.Value == MockModeStateValue) return;
