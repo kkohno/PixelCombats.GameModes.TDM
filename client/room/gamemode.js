@@ -220,7 +220,7 @@ function SetEndOfMatch() {
 		SetMockMode(leaderboard[0].Team, leaderboard[1].Team);
 		// добавляем очки победившим
 		for (const win_player of leaderboard[0].Team.Players) {
-			win_player.Properties.Get(SCORES_PROP_NAME).Value += WINNER_SCORES;
+			win_player.Properties.Scores.Value += WINNER_SCORES;
 		}
 	}
 	else {
