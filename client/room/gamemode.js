@@ -11,7 +11,7 @@ const GameModeTime = default_timer.game_mode_length_seconds();
 const MockModeTime = 20;
 const EndOfMatchTime = 8;
 const VoteTime = 20;
-const maxDeaths = Players.MaxCount * 5;
+const WINNER_SCORES = 10;
 
 // имена используемых объектов
 const WaitingStateValue = "Waiting";
@@ -20,8 +20,10 @@ const KnivesModeStateValue = "KnivesMode";
 const GameStateValue = "Game";
 const MockModeStateValue = "MockMode";
 const EndOfMatchStateValue = "EndOfMatch";
+
 const immortalityTimerName = "immortality"; // имя таймера, используемого в контексте игрока, для его бессмертия
 const KILLS_PROP_NAME = "Kills";
+const SCORES_PROP_NAME = "Scores";
 
 // получаем объекты, с которыми работает режим
 const mainTimer = Timers.GetContext().Get("Main");
@@ -51,25 +53,25 @@ LeaderBoard.PlayerLeaderBoardValues = [
 	new DisplayValueHeader(KILLS_PROP_NAME, "Statistics/Kills", "Statistics/KillsShort"),
 	new DisplayValueHeader("Deaths", "Statistics/Deaths", "Statistics/DeathsShort"),
 	new DisplayValueHeader("Spawns", "Statistics/Spawns", "Statistics/SpawnsShort"),
-	new DisplayValueHeader("Scores", "Statistics/Scores", "Statistics/ScoresShort")
+	new DisplayValueHeader(SCORES_PROP_NAME, "Statistics/Scores", "Statistics/ScoresShort")
 ];
-LeaderBoard.TeamLeaderBoardValue = new DisplayValueHeader(KILLS_PROP_NAME, "Statistics\Kills", "Statistics\Kills");
+LeaderBoard.TeamLeaderBoardValue = new DisplayValueHeader(SCORES_PROP_NAME, "Statistics\Scores", "Statistics\Scores");
 // задаем сортировку команд для списка лидирующих
 LeaderBoard.TeamWeightGetter.Set(function (team) {
-	return team.Properties.Get("Kills").Value;
+	return team.Properties.Get(SCORES_PROP_NAME).Value;
 });
 // задаем сортировку игроков для списка лидирующих
 LeaderBoard.PlayersWeightGetter.Set(function (player) {
-	return player.Properties.Get("Kills").Value;
+	return player.Properties.Get(SCORES_PROP_NAME).Value;
 });
 
-// отображаем изначально нули в килах команд
-redTeam.Properties.Get(KILLS_PROP_NAME).Value = 0;
-blueTeam.Properties.Get(KILLS_PROP_NAME).Value = 0;
+// отображаем изначально нули в очках команд
+redTeam.Properties.Get(SCORES_PROP_NAME).Value = 0;
+blueTeam.Properties.Get(SCORES_PROP_NAME).Value = 0;
 
 // отображаем значения вверху экрана
-Ui.GetContext().TeamProp1.Value = { Team: "Blue", Prop: KILLS_PROP_NAME };
-Ui.GetContext().TeamProp2.Value = { Team: "Red", Prop: KILLS_PROP_NAME};
+Ui.GetContext().TeamProp1.Value = { Team: "Blue", Prop: SCORES_PROP_NAME };
+Ui.GetContext().TeamProp2.Value = { Team: "Red", Prop: SCORES_PROP_NAME };
 
 // при запросе смены команды игрока - добавляем его в запрашиваемую команду
 Teams.OnRequestJoinTeam.Add(function (player, team) { team.Add(player); });
@@ -210,17 +212,21 @@ function SetGameMode() {
 	Spawns.GetContext().Despawn();
 	SpawnTeams();
 }
-
 function SetEndOfMatch() {
 	const leaderboard = LeaderBoard.GetTeams();
 	if (leaderboard[0].Weight !== leaderboard[1].Weight) {
-		SetEndOfMatch_MockMode(leaderboard[0].Team, leaderboard[1].Team);
+		// добавляем очки победившим
+		for (const win_player of leaderboard[0].Team.Players) {
+			win_player.Properties.Get(SCORES_PROP_NAME).Value += WINNER_SCORES;
+		}
+		// режим прикола вконце катки
+		SetMockMode(leaderboard[0].Team, leaderboard[1].Team);
 	}
 	else {
 		SetEndOfMatch_EndMode();
 	}
 }
-function SetEndOfMatch_MockMode(winners, loosers) {
+function SetMockMode(winners, loosers) {
 	// задаем состояние игры
 	stateProp.Value = MockModeStateValue;
 
@@ -261,6 +267,7 @@ function SetEndOfMatch_EndMode() {
 	var spawns = Spawns.GetContext();
 	spawns.enable = false;
 	spawns.Despawn();
+
 	Game.GameOver(LeaderBoard.GetTeams());
 	mainTimer.Restart(EndOfMatchTime);
 }
