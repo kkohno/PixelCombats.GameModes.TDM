@@ -3,7 +3,7 @@
 import { GameMode } from 'pixel_combats/room';
 
 // константы
-const PARAMETER_GAME_LENGTH = 'Length';
+const PARAMETER_GAME_LENGTH = 'default_game_mode_length';
 
 // возвращает длину матча
 export function game_mode_length_seconds() {

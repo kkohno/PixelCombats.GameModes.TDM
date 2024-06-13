@@ -46,7 +46,7 @@
     ],
     "Dropdown": [
       {
-        "Name": "Length",
+        "Name": "default_game_mode_length",
         "DisplayName": "GmParams/Length",
         "Default": "Length_M",
         "Order": 6,
