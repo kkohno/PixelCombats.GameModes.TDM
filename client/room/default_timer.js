@@ -14,5 +14,5 @@ export function game_mode_length_seconds() {
         case 'Length_L': return 360; // 6 min
         case 'Length_XL': return 420; // 7 min
     }
-    return team;
+    return 300;
 }
