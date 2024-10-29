@@ -218,7 +218,6 @@ function SetGameMode() {
 	}
 
 	mainTimer.Restart(GameModeTime);
-	Spawns.GetContext().Despawn();
 	SpawnTeams();
 }
 function SetEndOfMatch() {
@@ -298,8 +297,10 @@ function start_vote() {
 }
 
 function SpawnTeams() {
-	for (const team of Teams)
-		Spawns.GetContext(team).Spawn();
+	for (const team of Teams) {
+	    Spawns.GetContext(team).Despawn();
+	    return Spawns.GetContext(team).Spawn();
+	}
 }
 
 scores_timer.RestartLoop(SCORES_TIMER_INTERVAL);
