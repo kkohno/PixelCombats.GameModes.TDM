@@ -218,8 +218,7 @@ function SetGameMode() {
 	}
 
 	mainTimer.Restart(GameModeTime);
-	Spawns.GetContext().Despawn();
-	SpawnTeams();
+	SpawnTeams(true);
 }
 function SetEndOfMatch() {
 	scores_timer.Stop(); // выключаем таймер очков
@@ -297,9 +296,10 @@ function start_vote() {
 	}, MapRotation ? 3 : 0);
 }
 
-function SpawnTeams() {
-	for (const team of Teams)
-		Spawns.GetContext(team).Spawn();
+function SpawnTeams(despawn = false) {
+	for (const team of Teams) {
+	     despawn ? team.Spawns.Despawn() : team.Spawns.Spawn();
+	}
 }
 
 scores_timer.RestartLoop(SCORES_TIMER_INTERVAL);
