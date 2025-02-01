@@ -78,10 +78,12 @@ blueTeam.Properties.Get(SCORES_PROP_NAME).Value = 0;
 Ui.GetContext().TeamProp1.Value = { Team: "Blue", Prop: SCORES_PROP_NAME };
 Ui.GetContext().TeamProp2.Value = { Team: "Red", Prop: SCORES_PROP_NAME };
 
-// при запросе смены команды игрока - добавляем его в запрашиваемую команду
-Teams.OnRequestJoinTeam.Add(function (player, team) { team.Add(player); });
+// при запросе смены команды игрока - добавляем его в команду
+Teams.OnRequestJoinTeam.Add(function (player, team) {
+	Players.Count > 1 ? (redTeam.Count > blueTeam.Count ? blueTeam.Add(player) : blueTeam.Count > redTeam.Count ? redTeam.Add(player) : team.Add(player)) : team.Add(player);
+});
 // при запросе спавна игрока - спавним его
-Teams.OnPlayerChangeTeam.Add(function (player) { player.Spawns.Spawn() });
+Teams.OnPlayerChangeTeam.Add(function (player) { player.Spawns.Spawn(); });
 
 // бессмертие после респавна
 Spawns.GetContext().OnSpawn.Add(function (player) {
@@ -101,6 +103,10 @@ Timers.OnPlayerTimer.Add(function (timer) {
 Spawns.OnSpawn.Add(function (player) {
 	if (stateProp.Value == MockModeStateValue) return;
 	++player.Properties.Spawns.Value;
+});
+// обработчик деспавнов
+Spawns.OnDespawn.Add(function (player) {
+	if (stateProp.Value == GameStateValue) player.Spawns.Spawn();
 });
 // обработчик смертей
 Damage.OnDeath.Add(function (player) {
@@ -219,7 +225,6 @@ function SetGameMode() {
 
 	mainTimer.Restart(GameModeTime);
 	Spawns.GetContext().Despawn();
-	SpawnTeams();
 }
 function SetEndOfMatch() {
 	scores_timer.Stop(); // выключаем таймер очков
@@ -303,4 +308,3 @@ function SpawnTeams() {
 }
 
 scores_timer.RestartLoop(SCORES_TIMER_INTERVAL);
-
