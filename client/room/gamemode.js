@@ -83,7 +83,9 @@ Teams.OnRequestJoinTeam.Add(function (player, team) {
 	Players.Count > 1 ? (redTeam.Count > blueTeam.Count ? blueTeam.Add(player) : blueTeam.Count > redTeam.Count ? redTeam.Add(player) : team.Add(player)) : team.Add(player);
 });
 // при запросе спавна игрока - спавним его
-Teams.OnPlayerChangeTeam.Add(function (player) { player.Spawns.Spawn(); });
+Teams.OnPlayerChangeTeam.Add(function (player) {
+	if ((!player.Spawns.IsSpawned || player.IsAlive) || player.Properties.Spawns.Value <= 0) player.Spawns.Spawn();
+});
 
 // бессмертие после респавна
 Spawns.GetContext().OnSpawn.Add(function (player) {
