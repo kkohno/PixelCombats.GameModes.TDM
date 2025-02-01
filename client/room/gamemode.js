@@ -84,7 +84,8 @@ Teams.OnRequestJoinTeam.Add(function (player, team) {
 });
 // при запросе спавна игрока - спавним его
 Teams.OnPlayerChangeTeam.Add(function (player) {
-	if ((!player.Spawns.IsSpawned || player.IsAlive) || player.Properties.Spawns.Value <= 0) player.Spawns.Spawn();
+	//if ((!player.Spawns.IsSpawned || player.IsAlive) || player.Properties.Spawns.Value <= 0) player.Spawns.Spawn();
+	player.Spawns.Spawn();
 });
 
 // бессмертие после респавна
