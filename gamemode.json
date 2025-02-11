@@ -48,7 +48,7 @@
       {
         "Name": "default_game_mode_length",
         "DisplayName": "GmParams/Length",
-        "Default": "Length_M",
+        "Default": "Length_XL",
         "Order": 6,
         "Variants": [
           {
