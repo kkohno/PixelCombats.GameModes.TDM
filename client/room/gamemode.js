@@ -9,7 +9,7 @@ import * as mapScores from './map_scores.js';
 import { addTeamScores } from './team_scores.js';
 
 room.PopupsEnable = true;
-
+// ето тнт, если чо можешь комм удалить (мои)
 // настройки
 const WaitingPlayersTime = 10;
 const TacticalPreparationTime = 30;
@@ -64,11 +64,9 @@ BreackGraph.PlayerBlockBoost = true;
 Properties.GetContext().GameModeName.Value = "GameModes/Team Dead Match";
 TeamsBalancer.IsAutoBalance = true;
 Ui.GetContext().MainTimerId.Value = mainTimer.Id;
-// создаем стандартные команды
-const blueTeam = teams.create_team_blue();
-const redTeam = teams.create_team_red();
-blueTeam.Build.BlocksSet.Value = BuildBlocksSet.Blue;
-redTeam.Build.BlocksSet.Value = BuildBlocksSet.Red;
+// обрабатываем и создаем модульные команды и не 
+const redTeam = teams.creare_new_team('Red', 'Teams/Red\nСиние', new Color(125/255, 0, 0, 0), 2, BuildBlocksSet.Red); // модульная команда.если тебе не нравится, можешь удалять ето '\n' это новый текст в js. и еще новый цвет командам.
+const blueTeam = teams.create_new_team('Blue', 'Teams/Blue\nКрасные', new Color(0, 0, 125/255, 0), 1, BuildBlocksSet.Blue);
 
 // настраиваем параметры, которые нужно выводить в лидерборде
 LeaderBoard.PlayerLeaderBoardValues = [
